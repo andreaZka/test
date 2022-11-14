@@ -32,7 +32,7 @@ services:
       - CALIPER_BENCHCONFIG=benchConfig.yaml
       - CALIPER_NETWORKCONFIG=networkConfig.yaml
       - CALIPER-WORKER-REMOTE=true
-      - CALIPER-WORKER-COMMUNICATION-METHOD=true
+      - CALIPER-WORKER-COMMUNICATION-METHOD=mqtt
       - CALIPER-WORKER-COMMUNICATION-ADDRESS=mqtt://localhost:1883
     depends_on:
       - mosquitto
@@ -52,7 +52,7 @@ services:
       - CALIPER_BENCHCONFIG=benchConfig.yaml
       - CALIPER_NETWORKCONFIG=networkConfig.yaml
       - CALIPER-WORKER-REMOTE=true
-      - CALIPER-WORKER-COMMUNICATION-METHOD=true
+      - CALIPER-WORKER-COMMUNICATION-METHOD=mqtt
       - CALIPER-WORKER-COMMUNICATION-ADDRESS=mqtt://localhost:1883
     depends_on:
       - mosquitto
@@ -72,7 +72,7 @@ services:
       - CALIPER_BENCHCONFIG=benchConfig.yaml
       - CALIPER_NETWORKCONFIG=networkConfig.yaml
       - CALIPER-WORKER-REMOTE=true
-      - CALIPER-WORKER-COMMUNICATION-METHOD=true
+      - CALIPER-WORKER-COMMUNICATION-METHOD=mqtt
       - CALIPER-WORKER-COMMUNICATION-ADDRESS=mqtt://localhost:1883
     depends_on:
       - mosquitto
