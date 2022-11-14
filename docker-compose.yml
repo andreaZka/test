@@ -1,0 +1,107 @@
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+version: '3'
+
+services:
+
+  ####################
+  # CALIPER SERVICES #
+  ####################
+
+  caliper-manager:
+    image: hyperledger/caliper:0.5.0
+    container_name: caliper-manager
+    command: launch manager
+    volumes:
+      - ./:/hyperledger/caliper/workspace
+    environment:
+      - CALIPER_BIND_SUT=cosmos:0.45.8
+      - CALIPER_BIND_FILE=cosmos-binding.yaml
+      - CALIPER_BENCHCONFIG=benchConfig.yaml
+      - CALIPER_NETWORKCONFIG=networkConfig.yaml
+      - CALIPER-WORKER-REMOTE=true
+      - CALIPER-WORKER-COMMUNICATION-METHOD=true
+      - CALIPER-WORKER-COMMUNICATION-ADDRESS=mqtt://localhost:1883
+    depends_on:
+      - mosquitto
+    networks:
+      localnet:
+        ipv4_address: 192.168.10.2
+
+  caliper-worker1:
+    image: hyperledger/caliper:0.5.0
+    container_name: caliper-worker1
+    command: launch worker
+    volumes:
+      - ./:/hyperledger/caliper/workspace
+    environment:
+      - CALIPER_BIND_SUT=cosmos:0.45.8
+      - CALIPER_BIND_FILE=cosmos-binding.yaml
+      - CALIPER_BENCHCONFIG=benchConfig.yaml
+      - CALIPER_NETWORKCONFIG=networkConfig.yaml
+      - CALIPER-WORKER-REMOTE=true
+      - CALIPER-WORKER-COMMUNICATION-METHOD=true
+      - CALIPER-WORKER-COMMUNICATION-ADDRESS=mqtt://localhost:1883
+    depends_on:
+      - mosquitto
+    networks:
+      localnet:
+        ipv4_address: 192.168.10.3
+
+  caliper-worker2:
+    image: hyperledger/caliper:0.5.0
+    container_name: caliper-worker2
+    command: launch worker
+    volumes:
+      - ./:/hyperledger/caliper/workspace
+    environment:
+      - CALIPER_BIND_SUT=cosmos:0.45.8
+      - CALIPER_BIND_FILE=cosmos-binding.yaml
+      - CALIPER_BENCHCONFIG=benchConfig.yaml
+      - CALIPER_NETWORKCONFIG=networkConfig.yaml
+      - CALIPER-WORKER-REMOTE=true
+      - CALIPER-WORKER-COMMUNICATION-METHOD=true
+      - CALIPER-WORKER-COMMUNICATION-ADDRESS=mqtt://localhost:1883
+    depends_on:
+      - mosquitto
+    networks:
+      localnet:
+        ipv4_address: 192.168.10.4
+
+  ###############
+  # MQTT BROKER #
+  ###############
+
+  mosquitto:
+    image: eclipse-mosquitto
+    hostname: mosquitto
+    container_name: mosquitto
+    restart: always
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+    volumes:
+      - ./mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+    networks:
+      localnet:
+        ipv4_address: 192.168.10.5
+
+networks:
+  localnet:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 192.168.10.0/25
